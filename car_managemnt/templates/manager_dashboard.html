@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Dashboard</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2>📊 Manager Analytics Dashboard</h2>
+    <p style="color:#444;">
+        Employee Performance + Team Reports + Customer Status Analytics
+    </p>
+
+    <hr><br>
+
+    <!-- ================= SUMMARY ================= -->
+    <h3>📌 Customer Summary</h3>
+
+    <table>
+        <tr>
+            <th>Total</th>
+            <th>Willing</th>
+            <th>Not Willing</th>
+            <th>Pending</th>
+        </tr>
+        <tr>
+            <td>{{ total }}</td>
+            <td>{{ willing }}</td>
+            <td>{{ not_willing }}</td>
+            <td>{{ pending }}</td>
+        </tr>
+    </table>
+
+    <hr><br>
+
+    <!-- ================= PIE CHART ================= -->
+    <h3>📊 Customer Status Chart</h3>
+
+    <!-- Hidden Values -->
+    <input type="hidden" id="willing" value="{{ willing }}">
+    <input type="hidden" id="not_willing" value="{{ not_willing }}">
+    <input type="hidden" id="pending" value="{{ pending }}">
+
+    <div style="width:400px; margin:auto;">
+        <canvas id="statusChart"></canvas>
+    </div>
+
+    <hr><br>
+
+    <!-- ================= EMPLOYEE BAR CHART ================= -->
+    <h3>📊 Employee-wise Calling Report</h3>
+
+    <!-- Hidden Employee Data -->
+    <input type="hidden" id="employeeData" value='{{ employee_report | tojson }}'>
+
+    <div style="width:600px; margin:auto;">
+        <canvas id="employeeChart"></canvas>
+    </div>
+
+    <hr><br>
+
+    <!-- ================= TEAM PERFORMANCE TABLE ================= -->
+    <h3>👥 Team-wise Performance Report</h3>
+
+    <table>
+        <tr>
+            <th>Team Name</th>
+            <th>Total Customers</th>
+        </tr>
+
+        {% for t in team_report %}
+        <tr>
+            <td>{{ t[0] }}</td>
+            <td>{{ t[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <hr><br>
+
+    <!-- ================= CALL HISTORY ================= -->
+    <h3>📞 Call History</h3>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Employee</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Time</th>
+        </tr>
+
+        {% for h in history %}
+        <tr>
+            <td>{{ h[0] }}</td>
+            <td>{{ h[1] }}</td>
+            <td>{{ h[2] }}</td>
+            <td>{{ h[3] }}</td>
+            <td>{{ h[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <!-- EXPORT -->
+    <a href="/export_excel" class="btn green">⬇ Export Excel</a>
+    <a href="/export_pdf" class="btn red">⬇ Export PDF</a>
+
+    <br><br>
+    <a href="/logout" class="logout">Logout</a>
+
+</div>
+
+
+<!-- ================= JAVASCRIPT CHARTS ================= -->
+<script>
+window.onload = function () {
+
+    // -------- PIE CHART --------
+    const willing = parseInt(document.getElementById("willing").value);
+    const notWilling = parseInt(document.getElementById("not_willing").value);
+    const pending = parseInt(document.getElementById("pending").value);
+
+    new Chart(document.getElementById("statusChart"), {
+        type: "pie",
+        data: {
+            labels: ["Willing", "Not Willing", "Pending"],
+            datasets: [{
+                data: [willing, notWilling, pending]
+            }]
+        }
+    });
+
+
+    // -------- EMPLOYEE BAR CHART --------
+    const empData = JSON.parse(document.getElementById("employeeData").value);
+
+    const empNames = empData.map(e => e[0]);
+    const empCalls = empData.map(e => e[1]);
+
+    new Chart(document.getElementById("employeeChart"), {
+        type: "bar",
+        data: {
+            labels: empNames,
+            datasets: [{
+                label: "Total Calls",
+                data: empCalls
+            }]
+        }
+    });
+
+};
+</script>
+
+</body>
+</html>

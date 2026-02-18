@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <script>
+        function searchCustomer() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll("#customerTable tbody tr");
+
+            rows.forEach(row => {
+                let name = row.cells[0].textContent.toLowerCase();
+                let phone = row.cells[1].textContent.toLowerCase();
+
+                if (name.includes(input) || phone.includes(input)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<div class="emp-header">
+
+    <!-- LEFT TITLE -->
+    <div class="emp-title">
+        <h1>📞 Employee Dashboard</h1>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="emp-right">
+
+        <!-- PROFILE CARD -->
+        <div class="emp-profile-card">
+            <p class="emp-name">👤 {{ emp_name }}</p>
+            <p class="emp-team">🏷 Team: {{ team_name }}</p>
+
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="emp-search-box">
+            <button class="search-icon">🔍</button>
+            <input type="text"
+                   id="searchInput"
+                   placeholder="Search Customer..."
+                   onkeyup="searchCustomer()">
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ================= CUSTOMER TABLE ================= -->
+<div class="box">
+    <h2>📋 Assigned Customers</h2>
+
+    <table id="customerTable">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Phone</th>
+                <th>Call</th>
+                <th>Status</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for c in customers %}
+        <tr>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+
+            <td>
+                <a class="btn call" href="tel:{{c[2]}}">
+                    📞 Call
+                </a>
+            </td>
+
+            <td><b>{{ c[3] }}</b></td>
+
+            <td>
+                <a class="btn green" href="/update_status/{{c[0]}}/Willing">
+                    ✅ Willing
+                </a>
+
+                <a class="btn red" href="/update_status/{{c[0]}}/Not%20Willing">
+                    ❌ Not Willing
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

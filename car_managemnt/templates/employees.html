@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employees List</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="box">
+    <h2>👨‍💼 Employees Management</h2>
+
+    <!-- Back Button FIXED -->
+    <a href="/admin_dashboard" class="btn call">
+        ⬅ Back to Admin Dashboard
+    </a>
+
+    <br><br>
+
+    <!-- Employee Table -->
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Username</th>
+            <th>Action</th>
+        </tr>
+
+        {% for e in employees %}
+        <tr>
+            <td>{{ e[0] }}</td>
+            <td>{{ e[1] }}</td>
+            <td>{{ e[2] }}</td>
+            <td>{{ e[3] }}</td>
+
+            <td>
+                <a href="/edit_employee/{{ e[0] }}" class="btn green">
+                    ✏ Edit
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</body>
+</html>

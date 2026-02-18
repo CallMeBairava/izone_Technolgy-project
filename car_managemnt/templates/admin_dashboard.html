@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2>👑 Admin Dashboard</h2>
+    <p style="color:#444;">
+        Manage Employees, Customers, Teams & Call History
+    </p>
+
+    <hr><br>
+
+    <!-- =====================================================
+         ✅ ADD EMPLOYEE
+    ====================================================== -->
+    <h3>➕ Add Employee</h3>
+
+    <form method="POST" action="/add_employee">
+        <input type="text" name="name" placeholder="Employee Name" required>
+        <input type="text" name="phone" placeholder="Phone Number" required>
+        <input type="text" name="username" placeholder="Login Username" required>
+        <input type="password" name="password" placeholder="Login Password" required>
+        <button type="submit">Add Employee</button>
+    </form>
+
+    <br>
+    <a href="/employees" class="btn call">👨‍💼 View Employees</a>
+
+    <hr><br>
+
+    <!-- =====================================================
+         ✅ ADD CUSTOMER MANUALLY (FULL DETAILS)
+    ====================================================== -->
+    <h3>➕ Add Customer Manually</h3>
+
+    <form method="POST" action="/add_customer">
+
+        <input type="text" name="cust_name" placeholder="Customer Name" required>
+
+        <input type="text" name="cust_phone" placeholder="Phone Number" required>
+
+        <input type="email" name="cust_email" placeholder="Gmail Address" required>
+
+        <select name="cust_gender" required>
+            <option value="">-- Select Gender --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <input type="text" name="cust_address" placeholder="Customer Address" required>
+
+        <button type="submit">Add Customer</button>
+
+    </form>
+
+    <hr><br>
+
+    <!-- =====================================================
+         ✅ UPLOAD CUSTOMER EXCEL
+    ====================================================== -->
+    <h3>📂 Upload Customers via Excel</h3>
+
+    <p style="font-size:14px; color:gray;">
+        Excel Columns Required: <b>name, phone, email, gender, address</b>
+    </p>
+
+    <form method="POST" action="/upload_customers" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Upload Excel</button>
+    </form>
+
+    <hr><br>
+
+    <!-- =====================================================
+         ✅ TEAM MANAGEMENT
+    ====================================================== -->
+    <h2 style="color:#003366;">👥 Team Management</h2>
+
+    <!-- ================= CREATE TEAM ================= -->
+    <h3>🏢 Create New Team</h3>
+
+    <form method="POST" action="/create_team">
+        <input type="text" name="team_name" placeholder="Enter Team Name" required>
+        <button type="submit">+ Create Team</button>
+    </form>
+
+    <hr><br>
+
+    <!-- ================= ASSIGN EMPLOYEE TO TEAM ================= -->
+    <h3>👨‍💼 Assign Employee to Team</h3>
+
+    <form method="POST" action="/add_team_member">
+
+        <select name="team_id" required>
+            <option value="">-- Select Team --</option>
+            {% for t in teams %}
+            <option value="{{ t[0] }}">{{ t[1] }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="employee_id" required>
+            <option value="">-- Select Employee --</option>
+            {% for e in employees %}
+            <option value="{{ e[0] }}">{{ e[1] }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Assign Employee</button>
+    </form>
+
+    <hr><br>
+
+    <!-- ================= ASSIGN CUSTOMERS TO TEAM ================= -->
+    <h3>📌 Assign Customers to Team</h3>
+
+    <form method="POST" action="/assign_team_customers">
+
+        <select name="team_id" required>
+            <option value="">-- Select Team --</option>
+            {% for t in teams %}
+            <option value="{{ t[0] }}">{{ t[1] }}</option>
+            {% endfor %}
+        </select>
+
+        <p><b>Select Customers:</b></p>
+
+        <div style="max-height:200px; overflow-y:scroll;
+                    border:1px solid #ddd; padding:10px;
+                    border-radius:10px;">
+
+            {% for c in customers %}
+            <label style="display:block; margin:6px;">
+                <input type="checkbox" name="customer_ids" value="{{ c[0] }}">
+                {{ c[1] }} ({{ c[2] }})
+            </label>
+            {% endfor %}
+
+        </div>
+
+        <br>
+        <button type="submit">Assign Customers</button>
+    </form>
+
+    <hr><br>
+
+    <!-- =====================================================
+         ✅ CUSTOMER LIST WITH FULL DETAILS + ACTIONS
+    ====================================================== -->
+    <h2 style="color:#003366;">📋 Customer List</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for c in customers %}
+        <tr>
+            <td>{{ c[0] }}</td>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[3] }}</td>
+            <td>{{ c[4] }}</td>
+            <td>{{ c[5] }}</td>
+            <td>{{ c[6] }}</td>
+
+            <td>
+                <a href="/edit_customer/{{ c[0] }}" class="btn green">Edit</a>
+
+                <a href="/delete_customer/{{ c[0] }}"
+                   class="btn red"
+                   onclick="return confirm('Are you sure to delete this customer?');">
+                   Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <hr><br>
+
+    <!-- =====================================================
+         ✅ CLEAR CALL HISTORY BUTTON
+    ====================================================== -->
+    <h3>📞 Call History Management</h3>
+
+    <form method="POST" action="/clear_history">
+        <button type="submit" style="background:red;">
+            ❌ Clear All Call History
+        </button>
+    </form>
+
+    <hr><br>
+
+    <!-- LOGOUT -->
+    <a href="/logout" class="logout">Logout</a>
+
+</div>
+
+</body>
+</html>
