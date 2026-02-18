@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!-- ✅ Search Script -->
+    <script>
+        function searchCustomer() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll("#customerTable tbody tr");
+
+            rows.forEach(row => {
+                let name = row.cells[1].textContent.toLowerCase();
+                let phone = row.cells[2].textContent.toLowerCase();
+
+                row.style.display =
+                    (name.includes(input) || phone.includes(input))
+                    ? ""
+                    : "none";
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+<div class="crm-container">
+
+    <!-- ================= SIDEBAR ================= -->
+    <div class="sidebar">
+        <h2>Employee CRM</h2>
+        <a href="/employee" class="active">📞 Calling Panel</a>
+        <a href="/logout">🚪 Logout</a>
+    </div>
+
+    <!-- ================= MAIN AREA ================= -->
+    <div style="flex:1;">
+
+        <!-- ================= HEADER ================= -->
+        <div class="emp-header">
+
+            <!-- LEFT TITLE -->
+            <div class="emp-title">
+                <h1>📞 Employee Dashboard</h1>
+                <p>Call customers, update status & write notes</p>
+            </div>
+
+            <!-- RIGHT SIDE -->
+            <div class="emp-right">
+
+                <!-- PROFILE CARD -->
+                <div class="emp-profile-card">
+                    <p class="emp-name">👤 {{ emp_name }}</p>
+                    <p class="emp-team">🏷 Team: {{ team_name }}</p>
+                    <a href="/logout" class="logout-btn">Logout</a>
+                </div>
+
+                <!-- SEARCH BAR -->
+                <div class="emp-search-box">
+                    <button class="search-icon">🔍</button>
+                    <input type="text"
+                           id="searchInput"
+                           placeholder="Search Customer..."
+                           onkeyup="searchCustomer()">
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= CUSTOMER TABLE ================= -->
+        <div class="content">
+
+            <div class="box">
+                <h2>📋 Assigned Customers</h2>
+
+                <table id="customerTable" class="crm-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Call</th>
+                            <th>Notes + Update</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for c in customers %}
+                    <tr>
+                        <td>{{ c[0] }}</td>
+                        <td>{{ c[1] }}</td>
+                        <td>{{ c[2] }}</td>
+                        <td>{{ c[3] }}</td>
+                        <td>{{ c[4] }}</td>
+                        <td>{{ c[5] }}</td>
+                        <td><b>{{ c[6] }}</b></td>
+
+                        <!-- CALL BUTTON -->
+                        <td>
+                            <a class="btn call" href="tel:{{ c[2] }}">
+                                📞 Call
+                            </a>
+                        </td>
+
+                        <!-- NOTES FORM -->
+                        <td>
+                            <form method="POST"
+                                  action="/save_call_note"
+                                  class="notes-form">
+
+                                <input type="hidden"
+                                       name="customer_id"
+                                       value="{{ c[0] }}">
+
+                                <select name="status" required>
+                                    <option value="">Status</option>
+                                    <option value="Willing">✅ Willing</option>
+                                    <option value="Not Willing">❌ Not Willing</option>
+                                    <option value="Pending">⏳ Pending</option>
+                                </select>
+
+                                <textarea name="notes"
+                                          placeholder="Enter notes..."
+                                          required></textarea>
+
+                                <button type="submit" class="btn green">
+                                    Save
+                                </button>
+                            </form>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+
+                {% if customers|length == 0 %}
+                    <p class="no-data">
+                        ❌ No customers assigned to your team yet.
+                    </p>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

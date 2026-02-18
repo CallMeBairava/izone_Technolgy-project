@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Employee</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>Update Employee Profile</h1>
+
+<div class="box">
+
+    <form method="POST">
+
+        <input type="text" name="name" value="{{ emp[1] }}" required>
+
+        <input type="text" name="phone" value="{{ emp[2] }}" required>
+
+        <input type="text" name="username" value="{{ emp[3] }}" required>
+
+        <input type="password" name="password" value="{{ emp[4] }}" required>
+
+        <button type="submit">Update Employee</button>
+
+    </form>
+
+</div>
+
+<br>
+<a href="/employees" class="logout">⬅ Back to Employee List</a>
+
+</body>
+</html>
