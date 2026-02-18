@@ -8,13 +8,13 @@ from fpdf import FPDF
 app = Flask(__name__)
 
 # =====================================================
-# ✅ SECRET KEY + SESSION TIMEOUT (5 MINUTES)
+# ✅ SECRET KEY + SESSION TIMEOUT (30 MINUTES)
 # =====================================================
 app.secret_key = "customer_calling_system_2026"
-app.permanent_session_lifetime = timedelta(minutes=5)
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 # =====================================================
-#                  UPLOAD FOLDER
+# ✅ UPLOAD FOLDER
 # =====================================================
 UPLOAD_FOLDER = "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -22,20 +22,21 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 if not os.path.exists("uploads"):
     os.makedirs("uploads")
 
-# =====================================================
-#               DATABASE CONNECTION
-# =====================================================
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="0000",
-    database="customer_calling"
-)
-
-cursor = db.cursor(buffered=True)
 
 # =====================================================
-#                     HOME PAGE
+# ✅ DATABASE CONNECTION FUNCTION
+# =====================================================
+def get_db():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="0000",
+        database="customer_calling"
+    )
+
+
+# =====================================================
+# ✅ HOME PAGE
 # =====================================================
 @app.route("/")
 def home():
@@ -43,16 +44,17 @@ def home():
 
 
 # =====================================================
-#                     LOGIN PAGE
+# ✅ LOGIN PAGE
 # =====================================================
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
 
-        db.reconnect()
-
         username = request.form["username"]
         password = request.form["password"]
+
+        db = get_db()
+        cursor = db.cursor(buffered=True)
 
         # -------- ADMIN LOGIN --------
         cursor.execute("SELECT * FROM admin WHERE username=%s AND password=%s",
@@ -87,14 +89,15 @@ def login():
 
 
 # =====================================================
-#                 ADMIN DASHBOARD
+# ✅ ADMIN DASHBOARD
 # =====================================================
 @app.route("/admin_dashboard")
 def admin_dashboard():
     if session.get("role") != "admin":
         return redirect("/login")
 
-    db.reconnect()
+    db = get_db()
+    cursor = db.cursor()
 
     cursor.execute("SELECT * FROM customers")
     customers = cursor.fetchall()
@@ -112,52 +115,58 @@ def admin_dashboard():
 
 
 # =====================================================
-#                 ADMIN: ADD EMPLOYEE
+# ✅ ADMIN: ADD EMPLOYEE
 # =====================================================
 @app.route("/add_employee", methods=["POST"])
 def add_employee():
     if session.get("role") != "admin":
         return redirect("/login")
 
-    name = request.form["name"]
-    phone = request.form["phone"]
-    username = request.form["username"]
-    password = request.form["password"]
+    db = get_db()
+    cursor = db.cursor()
 
     cursor.execute("""
         INSERT INTO employees(name, phone, username, password)
         VALUES(%s,%s,%s,%s)
-    """, (name, phone, username, password))
+    """, (
+        request.form["name"],
+        request.form["phone"],
+        request.form["username"],
+        request.form["password"]
+    ))
 
     db.commit()
     return redirect("/admin_dashboard")
 
 
 # =====================================================
-#                 ADMIN: ADD CUSTOMER MANUALLY
+# ✅ ADMIN: ADD CUSTOMER MANUALLY
 # =====================================================
 @app.route("/add_customer", methods=["POST"])
 def add_customer():
     if session.get("role") != "admin":
         return redirect("/login")
 
-    name = request.form["cust_name"]
-    phone = request.form["cust_phone"]
-    email = request.form["cust_email"]
-    gender = request.form["cust_gender"]
-    address = request.form["cust_address"]
+    db = get_db()
+    cursor = db.cursor()
 
     cursor.execute("""
         INSERT INTO customers(name, phone, email, gender, address, status)
         VALUES(%s,%s,%s,%s,%s,'Pending')
-    """, (name, phone, email, gender, address))
+    """, (
+        request.form["cust_name"],
+        request.form["cust_phone"],
+        request.form["cust_email"],
+        request.form["cust_gender"],
+        request.form["cust_address"]
+    ))
 
     db.commit()
     return redirect("/admin_dashboard")
 
 
 # =====================================================
-#                 ADMIN: UPLOAD CUSTOMERS EXCEL
+# ✅ ADMIN: UPLOAD CUSTOMERS USING EXCEL
 # =====================================================
 @app.route("/upload_customers", methods=["POST"])
 def upload_customers():
@@ -170,50 +179,87 @@ def upload_customers():
 
     df = pd.read_excel(filepath)
 
+    db = get_db()
+    cursor = db.cursor()
+
     for _, row in df.iterrows():
         cursor.execute("""
             INSERT INTO customers(name, phone, email, gender, address, status)
             VALUES(%s,%s,%s,%s,%s,'Pending')
-        """, (row["name"], row["phone"], row["email"],
-              row["gender"], row["address"]))
+        """, (
+            row["name"],
+            row["phone"],
+            row["email"],
+            row["gender"],
+            row["address"]
+        ))
 
     db.commit()
     return redirect("/admin_dashboard")
 
 
 # =====================================================
-#                 TEAM MANAGEMENT (ADMIN)
+# ✅ ADMIN: CREATE TEAM
 # =====================================================
 @app.route("/create_team", methods=["POST"])
 def create_team():
+    if session.get("role") != "admin":
+        return redirect("/login")
+
     team_name = request.form["team_name"]
+
+    db = get_db()
+    cursor = db.cursor()
 
     cursor.execute("INSERT INTO teams(team_name) VALUES(%s)", (team_name,))
     db.commit()
+
     return redirect("/admin_dashboard")
 
 
+# =====================================================
+# ✅ ADMIN: ASSIGN EMPLOYEE TO TEAM
+# =====================================================
 @app.route("/add_team_member", methods=["POST"])
 def add_team_member():
+    if session.get("role") != "admin":
+        return redirect("/login")
+
     team_id = request.form["team_id"]
     employee_id = request.form["employee_id"]
 
+    db = get_db()
+    cursor = db.cursor()
+
     cursor.execute("""
-        UPDATE employees SET team_id=%s WHERE id=%s
+        UPDATE employees
+        SET team_id=%s
+        WHERE id=%s
     """, (team_id, employee_id))
 
     db.commit()
     return redirect("/admin_dashboard")
 
 
+# =====================================================
+# ✅ ADMIN: ASSIGN CUSTOMERS TO TEAM
+# =====================================================
 @app.route("/assign_team_customers", methods=["POST"])
 def assign_team_customers():
+    if session.get("role") != "admin":
+        return redirect("/login")
+
     team_id = request.form["team_id"]
     customer_ids = request.form.getlist("customer_ids")
 
+    db = get_db()
+    cursor = db.cursor()
+
     for cid in customer_ids:
         cursor.execute("""
-            UPDATE customers SET team_id=%s WHERE id=%s
+            UPDATE customers
+            SET team_id=%s
+            WHERE id=%s
         """, (team_id, cid))
 
     db.commit()
@@ -221,12 +267,95 @@ def assign_team_customers():
 
 
 # =====================================================
-#                 EMPLOYEE DASHBOARD
+# ✅ EMPLOYEES LIST PAGE
+# =====================================================
+@app.route("/employees")
+def employees_page():
+    if session.get("role") != "admin":
+        return redirect("/login")
+
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM employees")
+    employees = cursor.fetchall()
+
+    return render_template("employees.html", employees=employees)
+
+
+# =====================================================
+# ✅ EDIT EMPLOYEE
+# =====================================================
+@app.route("/edit_employee/<int:id>", methods=["GET", "POST"])
+def edit_employee(id):
+    if session.get("role") != "admin":
+        return redirect("/login")
+
+    db = get_db()
+    cursor = db.cursor()
+
+    if request.method == "POST":
+        cursor.execute("""
+            UPDATE employees
+            SET name=%s, phone=%s, username=%s, password=%s
+            WHERE id=%s
+        """, (
+            request.form["name"],
+            request.form["phone"],
+            request.form["username"],
+            request.form["password"],
+            id
+        ))
+        db.commit()
+        return redirect("/employees")
+
+    cursor.execute("SELECT * FROM employees WHERE id=%s", (id,))
+    emp = cursor.fetchone()
+
+    return render_template("edit_employee.html", emp=emp)
+
+
+# =====================================================
+# ✅ EDIT CUSTOMER
+# =====================================================
+@app.route("/edit_customer/<int:id>", methods=["GET", "POST"])
+def edit_customer(id):
+    if session.get("role") != "admin":
+        return redirect("/login")
+
+    db = get_db()
+    cursor = db.cursor()
+
+    if request.method == "POST":
+        cursor.execute("""
+            UPDATE customers
+            SET name=%s, phone=%s, status=%s
+            WHERE id=%s
+        """, (
+            request.form["name"],
+            request.form["phone"],
+            request.form["status"],
+            id
+        ))
+        db.commit()
+        return redirect("/admin_dashboard")
+
+    cursor.execute("SELECT * FROM customers WHERE id=%s", (id,))
+    customer = cursor.fetchone()
+
+    return render_template("edit_customer.html", customer=customer)
+
+
+# =====================================================
+# ✅ EMPLOYEE PANEL
 # =====================================================
 @app.route("/employee")
 def employee_page():
     if session.get("role") != "employee":
         return redirect("/login")
+
+    db = get_db()
+    cursor = db.cursor()
 
     emp_username = session["username"]
 
@@ -234,29 +363,27 @@ def employee_page():
                    (emp_username,))
     emp = cursor.fetchone()
 
-    emp_name = emp[1]
-    team_id = emp[2]
+    if emp is None:
+        return "❌ Employee not found in database"
 
-    cursor.execute("SELECT team_name FROM teams WHERE id=%s", (team_id,))
-    team = cursor.fetchone()
-    team_name = team[0] if team else "Not Assigned"
+    team_id = emp[2]
 
     cursor.execute("SELECT * FROM customers WHERE team_id=%s", (team_id,))
     customers = cursor.fetchall()
 
-    return render_template("employee.html",
-                           customers=customers,
-                           emp_name=emp_name,
-                           team_name=team_name)
+    return render_template("employee.html", customers=customers)
 
 
 # =====================================================
-#        EMPLOYEE: SAVE STATUS + NOTES AFTER CALL
+# ✅ SAVE CALL NOTE + STATUS UPDATE
 # =====================================================
 @app.route("/save_call_note", methods=["POST"])
 def save_call_note():
     if session.get("role") != "employee":
         return redirect("/login")
+
+    db = get_db()
+    cursor = db.cursor()
 
     customer_id = request.form["customer_id"]
     status = request.form["status"]
@@ -264,9 +391,8 @@ def save_call_note():
 
     emp_user = session["username"]
 
-    cursor.execute("""
-        UPDATE customers SET status=%s WHERE id=%s
-    """, (status, customer_id))
+    cursor.execute("UPDATE customers SET status=%s WHERE id=%s",
+                   (status, customer_id))
 
     cursor.execute("SELECT name FROM customers WHERE id=%s", (customer_id,))
     cname = cursor.fetchone()[0]
@@ -281,12 +407,15 @@ def save_call_note():
 
 
 # =====================================================
-#                 MANAGER DASHBOARD
+# ✅ MANAGER DASHBOARD
 # =====================================================
 @app.route("/manager_dashboard")
 def manager_dashboard():
     if session.get("role") != "manager":
         return redirect("/login")
+
+    db = get_db()
+    cursor = db.cursor()
 
     cursor.execute("SELECT COUNT(*) FROM customers")
     total = cursor.fetchone()[0]
@@ -300,40 +429,43 @@ def manager_dashboard():
     cursor.execute("SELECT COUNT(*) FROM customers WHERE status='Pending'")
     pending = cursor.fetchone()[0]
 
-    # ✅ Teams + Employees List
     cursor.execute("SELECT * FROM teams")
     teams = cursor.fetchall()
 
     cursor.execute("SELECT * FROM employees")
     employees = cursor.fetchall()
 
-    # Call History
     cursor.execute("SELECT * FROM call_history ORDER BY call_time DESC")
     history = cursor.fetchall()
 
-    return render_template(
-        "manager_dashboard.html",
-        total=total,
-        willing=willing,
-        not_willing=not_willing,
-        pending=pending,
-        history=history,
-        teams=teams,
-        employees=employees
-    )
+    return render_template("manager_dashboard.html",
+                           total=total,
+                           willing=willing,
+                           not_willing=not_willing,
+                           pending=pending,
+                           teams=teams,
+                           employees=employees,
+                           history=history)
 
 
 # =====================================================
-#                 EXPORT REPORTS
+# ✅ EXPORT REPORTS (MANAGER)
 # =====================================================
 @app.route("/export_excel")
 def export_excel():
+    if session.get("role") != "manager":
+        return redirect("/login")
+
+    db = get_db()
+    cursor = db.cursor()
+
     cursor.execute("SELECT * FROM call_history")
     data = cursor.fetchall()
 
-    df = pd.DataFrame(data,
-                      columns=["ID", "Employee", "Customer",
-                               "Status", "Notes", "Time"])
+    df = pd.DataFrame(
+        data,
+        columns=["ID", "Employee", "Customer", "Status", "Notes", "Time"]
+    )
 
     file_name = "call_report.xlsx"
     df.to_excel(file_name, index=False)
@@ -343,6 +475,12 @@ def export_excel():
 
 @app.route("/export_pdf")
 def export_pdf():
+    if session.get("role") != "manager":
+        return redirect("/login")
+
+    db = get_db()
+    cursor = db.cursor()
+
     cursor.execute("SELECT * FROM call_history")
     data = cursor.fetchall()
 
@@ -364,20 +502,7 @@ def export_pdf():
 
 
 # =====================================================
-#                 CLEAR CALL HISTORY (ADMIN)
-# =====================================================
-@app.route("/clear_history", methods=["POST"])
-def clear_history():
-    if session.get("role") != "admin":
-        return redirect("/login")
-
-    cursor.execute("DELETE FROM call_history")
-    db.commit()
-    return redirect("/admin_dashboard")
-
-
-# =====================================================
-#                     LOGOUT
+# ✅ LOGOUT
 # =====================================================
 @app.route("/logout")
 def logout():
@@ -386,7 +511,7 @@ def logout():
 
 
 # =====================================================
-#                     RUN SERVER
+# ✅ RUN SERVER
 # =====================================================
 if __name__ == "__main__":
     app.run(debug=True)

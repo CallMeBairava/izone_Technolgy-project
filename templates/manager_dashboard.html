@@ -5,11 +5,12 @@
 
     <link rel="stylesheet" href="/static/style.css">
 
-    <!-- ✅ Chart.js -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
+<div class="background-shape"></div>
 
 <div class="crm-container">
 
@@ -35,22 +36,22 @@
         <!-- ================= SUMMARY CARDS ================= -->
         <div class="summary-grid">
 
-            <div class="card">
+            <div class="summary-card blue">
                 <h3>Total Customers</h3>
                 <p>{{ total }}</p>
             </div>
 
-            <div class="card green">
+            <div class="summary-card green">
                 <h3>Willing</h3>
                 <p>{{ willing }}</p>
             </div>
 
-            <div class="card red">
+            <div class="summary-card red">
                 <h3>Not Willing</h3>
                 <p>{{ not_willing }}</p>
             </div>
 
-            <div class="card yellow">
+            <div class="summary-card yellow">
                 <h3>Pending</h3>
                 <p>{{ pending }}</p>
             </div>
@@ -61,7 +62,7 @@
         <div class="box">
             <h2>📌 Customer Status Chart</h2>
 
-            <div style="width:400px; margin:auto;">
+            <div class="chart-box">
                 <canvas id="statusChart"></canvas>
             </div>
         </div>
@@ -92,9 +93,7 @@
             </table>
 
             {% if teams|length == 0 %}
-            <p style="color:red; margin-top:15px;">
-                ❌ No Teams Created Yet.
-            </p>
+            <p class="error-text">❌ No Teams Created Yet.</p>
             {% endif %}
         </div>
 
@@ -112,23 +111,23 @@
                     <th>Call Time</th>
                 </tr>
 
-                {% for h in history %}
-                <tr>
-                    <td>{{ h[0] }}</td>
-                    <td>{{ h[1] }}</td>
-                    <td>{{ h[2] }}</td>
-                    <td><b>{{ h[3] }}</b></td>
-                    <td style="max-width:250px;">{{ h[4] }}</td>
-                    <td>{{ h[5] }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+  {% for h in history %}
+<tr>
+    <td>{{ h[0] }}</td>
+    <td>{{ h[1] }}</td>
+    <td>{{ h[2] }}</td>
+    <td><b>{{ h[3] }}</b></td>
 
-            {% if history|length == 0 %}
-            <p style="color:red; margin-top:15px;">
-                ❌ No call history found yet.
-            </p>
-            {% endif %}
+    <!-- ✅ Notes Correct -->
+    <td style="max-width:250px;">
+        {{ h[5] }}
+    </td>
+
+    <!-- ✅ Call Time Correct -->
+    <td>{{ h[4] }}</td>
+</tr>
+{% endfor %}
+
         </div>
 
     </div>
@@ -146,7 +145,8 @@
         data: {
             labels: ["Willing", "Not Willing", "Pending"],
             datasets: [{
-                data: [willing, notWilling, pending]
+                data: [willing, notWilling, pending],
+                backgroundColor: ["#16a34a", "#dc2626", "#2563eb"]
             }]
         }
     });

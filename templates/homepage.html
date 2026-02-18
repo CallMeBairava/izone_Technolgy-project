@@ -4,42 +4,62 @@
     <title>Customer Calling CRM</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
 
-<!-- HERO SECTION -->
-<div class="hero">
-    <h1>📞 Customer Calling CRM System</h1>
-
-    <p>
-        Manage Customers, Assign Employees, Track Calling Status,  
-        Generate Reports with Admin, Manager, Employee Roles.
-    </p>
-
-    <a href="/login" class="hero-btn">🚀 Login Now</a>
+<!-- ================= TOP NAVBAR ================= -->
+<div class="topbar">
+    <h2 class="logo">Customer Calling CRM System</h2>
+    <a href="/login" class="top-login">Login</a>
 </div>
 
 
-<!-- FEATURES SECTION -->
-<div class="features-container">
+<!-- ================= HERO SECTION ================= -->
+<section class="hero">
+
+    <div class="hero-content">
+        <h1>📞 Customer Calling CRM System</h1>
+
+        <p>
+            Manage Customers, Assign Employees, Track Calling Status, Generate Reports  
+            with Admin, Manager, Employee Roles.
+        </p>
+
+        <a href="/login" class="hero-btn">🚀 Login Now</a>
+    </div>
+
+    <div class="hero-image">
+        <img src="https://cdn-icons-png.flaticon.com/512/1995/1995470.png">
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURES CARDS ================= -->
+<section class="features">
 
     <h2>✨ Key Features</h2>
 
-    <div class="feature-box">
-        <h3>👑 Admin Control</h3>
-        <p>Create employees, upload customers, manage system.</p>
+    <div class="card-grid">
+
+        <div class="feature-card">
+            <h3>👑 Admin Control</h3>
+            <p>Create employees, upload customers, manage teams easily.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>📊 Manager Reports</h3>
+            <p>Track call performance, view charts, export reports.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>📞 Employee Calling</h3>
+            <p>Employees call assigned customers and update status instantly.</p>
+        </div>
+
     </div>
 
-    <div class="feature-box">
-        <h3>📊 Manager Reports</h3>
-        <p>Assign customers, view charts, export reports.</p>
-    </div>
-
-    <div class="feature-box">
-        <h3>📞 Employee Calling Panel</h3>
-        <p>Employees call assigned customers and update status.</p>
-    </div>
-
-</div>
+</section>
 
 </body>
 </html>

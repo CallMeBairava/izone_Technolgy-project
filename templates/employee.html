@@ -1,157 +1,164 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Employee Dashboard</title>
+    <title>Employee Panel</title>
     <link rel="stylesheet" href="/static/style.css">
-
-    <!-- ✅ Search Script -->
-    <script>
-        function searchCustomer() {
-            let input = document.getElementById("searchInput").value.toLowerCase();
-            let rows = document.querySelectorAll("#customerTable tbody tr");
-
-            rows.forEach(row => {
-                let name = row.cells[1].textContent.toLowerCase();
-                let phone = row.cells[2].textContent.toLowerCase();
-
-                row.style.display =
-                    (name.includes(input) || phone.includes(input))
-                    ? ""
-                    : "none";
-            });
-        }
-    </script>
 </head>
 
 <body>
 
-<div class="crm-container">
+<!-- ================= HEADER ================= -->
+<div class="employee-header">
+    <h2>📞 Employee Calling Panel</h2>
 
-    <!-- ================= SIDEBAR ================= -->
-    <div class="sidebar">
-        <h2>Employee CRM</h2>
-        <a href="/employee" class="active">📞 Calling Panel</a>
-        <a href="/logout">🚪 Logout</a>
-    </div>
-
-    <!-- ================= MAIN AREA ================= -->
-    <div style="flex:1;">
-
-        <!-- ================= HEADER ================= -->
-        <div class="emp-header">
-
-            <!-- LEFT TITLE -->
-            <div class="emp-title">
-                <h1>📞 Employee Dashboard</h1>
-                <p>Call customers, update status & write notes</p>
-            </div>
-
-            <!-- RIGHT SIDE -->
-            <div class="emp-right">
-
-                <!-- PROFILE CARD -->
-                <div class="emp-profile-card">
-                    <p class="emp-name">👤 {{ emp_name }}</p>
-                    <p class="emp-team">🏷 Team: {{ team_name }}</p>
-                    <a href="/logout" class="logout-btn">Logout</a>
-                </div>
-
-                <!-- SEARCH BAR -->
-                <div class="emp-search-box">
-                    <button class="search-icon">🔍</button>
-                    <input type="text"
-                           id="searchInput"
-                           placeholder="Search Customer..."
-                           onkeyup="searchCustomer()">
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ================= CUSTOMER TABLE ================= -->
-        <div class="content">
-
-            <div class="box">
-                <h2>📋 Assigned Customers</h2>
-
-                <table id="customerTable" class="crm-table">
-
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>Gender</th>
-                            <th>Address</th>
-                            <th>Status</th>
-                            <th>Call</th>
-                            <th>Notes + Update</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                    {% for c in customers %}
-                    <tr>
-                        <td>{{ c[0] }}</td>
-                        <td>{{ c[1] }}</td>
-                        <td>{{ c[2] }}</td>
-                        <td>{{ c[3] }}</td>
-                        <td>{{ c[4] }}</td>
-                        <td>{{ c[5] }}</td>
-                        <td><b>{{ c[6] }}</b></td>
-
-                        <!-- CALL BUTTON -->
-                        <td>
-                            <a class="btn call" href="tel:{{ c[2] }}">
-                                📞 Call
-                            </a>
-                        </td>
-
-                        <!-- NOTES FORM -->
-                        <td>
-                            <form method="POST"
-                                  action="/save_call_note"
-                                  class="notes-form">
-
-                                <input type="hidden"
-                                       name="customer_id"
-                                       value="{{ c[0] }}">
-
-                                <select name="status" required>
-                                    <option value="">Status</option>
-                                    <option value="Willing">✅ Willing</option>
-                                    <option value="Not Willing">❌ Not Willing</option>
-                                    <option value="Pending">⏳ Pending</option>
-                                </select>
-
-                                <textarea name="notes"
-                                          placeholder="Enter notes..."
-                                          required></textarea>
-
-                                <button type="submit" class="btn green">
-                                    Save
-                                </button>
-                            </form>
-                        </td>
-
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-
-                </table>
-
-                {% if customers|length == 0 %}
-                    <p class="no-data">
-                        ❌ No customers assigned to your team yet.
-                    </p>
-                {% endif %}
-
-            </div>
-        </div>
-
-    </div>
+    <a href="/logout" class="logout-btn">Logout</a>
 </div>
+
+
+<div class="employee-container">
+
+    <!-- ================= PROFILE CARD ================= -->
+    <div class="employee-profile">
+
+        <div class="profile-left">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+        </div>
+
+        <div class="profile-info">
+            <h3>Welcome, Employee</h3>
+            <p>Role: Employee Caller</p>
+            <p>Team: Assigned Customers</p>
+        </div>
+
+        <div class="profile-badge">
+            Active Caller
+        </div>
+
+    </div>
+
+
+    <!-- ================= HERO TITLE ================= -->
+    <div class="employee-hero">
+        <h1>Calling Customers</h1>
+        <p>Update customer status after each call with notes.</p>
+    </div>
+
+
+    <!-- ================= SEARCH BAR ================= -->
+    <div class="search-box">
+        <input type="text" id="searchInput"
+               placeholder="Search customer by name..."
+               onkeyup="searchCustomers()">
+    </div>
+
+
+    <!-- ================= CUSTOMER LIST ================= -->
+    {% if customers|length > 0 %}
+
+    <div class="customer-grid" id="customerGrid">
+
+        {% for c in customers %}
+        <div class="customer-card">
+
+            <!-- CUSTOMER NAME + STATUS -->
+            <div class="customer-top">
+                <h3>👤 {{ c[1] }}</h3>
+
+                <!-- ✅ Correct Status -->
+                <span class="phone">
+                    {{ c[6] }}
+                </span>
+            </div>
+
+           <p>📞 Phone: {{ c[2] }}</p>
+
+<div class="customer-actions">
+    <a href="tel:{{ c[2] }}" class="call-now-btn">📞 Call</a>
+    <a href="https://wa.me/91{{ c[2] }}" target="_blank" class="whatsapp-btn">💬 WhatsApp</a>
+</div>
+
+            <!-- ✅ Correct Email -->
+            <p>📧 <b>Email:</b> {{ c[3] }}</p>
+
+            <!-- ✅ Correct Gender -->
+            <p>⚧ <b>Gender:</b> {{ c[4] }}</p>
+
+            <!-- ✅ Correct Address -->
+            <p>🏠 <b>Address:</b> {{ c[5] }}</p>
+
+
+            <!-- ================= FORM ================= -->
+            <form method="POST" action="/save_call_note">
+
+                <input type="hidden" name="customer_id" value="{{ c[0] }}">
+
+                <!-- STATUS DROPDOWN -->
+                <select name="status">
+
+                    <option value="Pending"
+                        {% if c[6]=="Pending" %}selected{% endif %}>
+                        Pending
+                    </option>
+
+                    <option value="Willing"
+                        {% if c[6]=="Willing" %}selected{% endif %}>
+                        Willing
+                    </option>
+
+                    <option value="Not Willing"
+                        {% if c[6]=="Not Willing" %}selected{% endif %}>
+                        Not Willing
+                    </option>
+
+                </select>
+
+                <!-- NOTES -->
+                <textarea name="notes" placeholder="Enter call notes..."></textarea>
+
+                <!-- SUBMIT -->
+                <button type="submit" class="call-btn">
+                    📌 Save Call Update
+                </button>
+
+            </form>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <!-- ================= EMPTY STATE ================= -->
+    <div class="empty-state">
+        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png">
+        <h2>No Customers Assigned</h2>
+        <p>Please wait until Admin assigns customers to your team.</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- ================= SEARCH SCRIPT ================= -->
+<script>
+function searchCustomers() {
+
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let cards = document.querySelectorAll(".customer-card");
+
+    cards.forEach(card => {
+        let name = card.querySelector("h3").innerText.toLowerCase();
+
+        if (name.includes(input)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+</script>
 
 </body>
 </html>

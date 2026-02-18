@@ -1,334 +1,1039 @@
-/* =========================================================
-   GLOBAL COMMON BASE (ALL PAGES)
-========================================================= */
+/* ==========================================
+   PREMIUM SaaS CRM UI - FULL PROJECT CSS
+   Supports ALL Templates + Background Images
+========================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* ==========================================
+   HOME PAGE PROFESSIONAL CRM UI
+========================================== */
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #f4f7fc;
-    color: #222;
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: url("/git/izone_Technolgy-project/static/7015971-removebg-preview.png"),
+              linear-gradient(to right, #fff, #fff7f3);
 }
 
-h1, h2, h3 {
-    margin: 0;
-    font-weight: bold;
+/* ================= TOPBAR ================= */
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 60px;
+  background: rgb(37, 132, 199);
 }
 
-a {
-    text-decoration: none;
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
 }
 
-/* =========================================================
-   COMMON TABLE STYLE (ALL PAGES)
-========================================================= */
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-    border-radius: 10px;
-    overflow: hidden;
+.top-login {
+  text-decoration: none;
+  font-weight: 700;
+  color: black;
+  padding: 10px 18px;
+  border-radius: 12px;
+  transition: 0.3s;
 }
 
-th {
-    background: #003366;
-    color: white;
-    padding: 14px;
-    text-transform: uppercase;
-    font-size: 14px;
+.top-login:hover {
+  background: #ff4d1c;
+  color: white;
 }
 
-td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    font-size: 14px;
+/* ================= HERO SECTION ================= */
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 70px 80px;
+  gap: 50px;
 }
 
-tr:nth-child(even) {
-    background: #f9fbff;
+.hero-content {
+  max-width: 600px;
 }
 
-tr:hover {
-    background: #e6f2ff;
+.hero-content h1 {
+  font-size: 48px;
+  font-weight: 900;
+  color: #111827;
 }
 
-/* =========================================================
-   COMMON BUTTONS (ALL PAGES)
-========================================================= */
+.hero-content p {
+  font-size: 16px;
+  margin: 20px 0;
+  color: #475569;
+  line-height: 1.6;
+}
 
+.hero-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 16px;
+  background: linear-gradient(to right, #ff4d1c, #ff7849);
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.hero-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* HERO IMAGE FIX */
+.hero-image img {
+  width: 320px;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* FLOAT ANIMATION */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
+}
+
+/* ================= FEATURES ================= */
+
+.features {
+  padding: 60px 80px;
+  text-align: center;
+}
+
+.features h2 {
+  font-size: 34px;
+  font-weight: 900;
+  margin-bottom: 40px;
+  color: #111827;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.feature-card {
+  background: rgba(255,255,255,0.95);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.10);
+  transition: 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 15px 35px rgba(0,0,0,0.15);
+}
+
+.feature-card h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #ff4d1c;
+}
+
+.feature-card p {
+  font-size: 14px;
+  color: #475569;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-image img {
+    width: 220px;
+  }
+}
+
+/* ==========================================
+   MAIN BOX STYLE (Employees/Edit Pages)
+========================================== */
+
+.box {
+  width: 100%;
+  max-width: 750px;
+  margin: 60px auto;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 35px;
+  border-radius: 20px;
+  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.10);
+  backdrop-filter: blur(12px);
+  animation: fadeUp 0.7s ease;
+}
+
+/* ---------- FORM DESIGN ---------- */
+form {
+  margin-top: 15px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 14px;
+  margin: 12px 0;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #ff4d1c;
+  box-shadow: 0px 0px 8px rgba(255, 77, 28, 0.25);
+}
+
+textarea {
+  min-height: 90px;
+  resize: none;
+}
+
+/* ---------- BUTTONS ---------- */
+button,
 .btn {
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: bold;
-    display: inline-block;
-    margin: 4px;
-    color: white;
-    transition: 0.3s;
+  display: inline-block;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 12px;
+  background: #ff4d1c;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.3s;
 }
 
-.green { background: #28a745; }
-.green:hover { background: #218838; }
+button:hover,
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
 
-.red { background: #dc3545; }
-.red:hover { background: #b02a37; }
+/* Button Variants */
+.btn.green {
+  background: #16a34a;
+}
 
-.call { background: #ff9800; }
-.call:hover { background: #e68900; }
+.btn.green:hover {
+  background: #15803d;
+}
 
+.btn.call {
+  background: #2563eb;
+}
+
+.btn.call:hover {
+  background: #1d4ed8;
+}
+
+/* Logout Link */
 .logout {
-    display: inline-block;
-    padding: 10px 25px;
-    background: black;
-    color: white;
-    border-radius: 25px;
+  display: inline-block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #ff4d1c;
+  text-decoration: none;
 }
 
 .logout:hover {
-    background: #444;
+  text-decoration: underline;
 }
 
-/* =========================================================
-=========================================================
-          ✅ ADMIN PAGE ONLY (CARE CRM STYLE)
-=========================================================
-========================================================= */
+/* ---------- TABLE DESIGN ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 25px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+}
 
-.admin-page {
-    display: flex;
-    min-height: 100vh;
+th {
+  background: #ff4d1c;
+  color: white;
+  padding: 14px;
+  text-align: left;
+}
+
+td {
+  padding: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+tr:hover {
+  background: #fff3ed;
+}
+
+/* ---------- LOGIN PAGE ---------- */
+.login-box {
+  width: 380px;
+  margin: 90px auto;
+  padding: 35px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- ANIMATION ---------- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  body {
+    padding: 15px;
+  }
+
+  .box {
+    width: 95%;
+    padding: 25px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+}
+/* ===============================
+   MANAGER DASHBOARD LAYOUT
+================================ */
+
+.crm-container {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: #111827;
+  padding: 25px;
+}
+
+.sidebar h2 {
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: #ff4d1c;
+  color: white;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 35px;
+}
+
+/* Header */
+.top-header h1 {
+  text-align: left;
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.top-header p {
+  color: gray;
+}
+
+/* Summary Cards */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+  margin: 25px 0;
+}
+
+.summary-card {
+  padding: 20px;
+  border-radius: 18px;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.12);
+}
+
+.summary-card p {
+  font-size: 28px;
+  margin-top: 8px;
+}
+
+/* Colors */
+.blue { background: linear-gradient(to right, #2563eb, #06b6d4); }
+.green { background: linear-gradient(to right, #16a34a, #4ade80); }
+.red { background: linear-gradient(to right, #dc2626, #fb7185); }
+.yellow { background: linear-gradient(to right, #f97316, #facc15); }
+
+/* Chart Box */
+.chart-box {
+  width: 420px;
+  margin: auto;
+}
+
+/* Error Text */
+.error-text {
+  color: red;
+  margin-top: 15px;
+  font-weight: 600;
+}
+/* ==========================================
+   ADMIN DASHBOARD FULL SUPPORT
+========================================== */
+
+.admin-portal {
+  display: flex;
 }
 
 /* Sidebar */
 .admin-sidebar {
-    width: 230px;
-    background: #003366;
-    color: white;
-    padding: 25px;
+  width: 250px;
+  min-height: 100vh;
+  background: #111827;
+  padding: 25px;
 }
 
 .admin-sidebar h2 {
-    font-size: 20px;
-    margin-bottom: 30px;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .admin-sidebar a {
-    display: block;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
-    color: white;
-    font-weight: 500;
+  display: block;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  color: #cbd5e1;
 }
 
 .admin-sidebar a:hover,
 .admin-sidebar a.active {
-    background: #0059b3;
+  background: #ff4d1c;
+  color: white;
 }
 
-/* Main Content */
-.admin-content {
-    flex: 1;
-    padding: 30px;
+/* Main */
+.admin-main {
+  flex: 1;
+  padding: 35px;
 }
 
 /* Navbar */
 .admin-navbar {
-    background: white;
-    padding: 15px 25px;
-    border-radius: 12px;
-    box-shadow: 0px 3px 10px rgba(0,0,0,0.12);
-    margin-bottom: 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 18px 25px;
+  border-radius: 18px;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.08);
+}
+
+.admin-navbar h1 {
+  font-size: 22px;
+  color: #ff4d1c;
+}
+
+.admin-user {
+  font-weight: 600;
+  color: gray;
 }
 
 /* Dashboard Cards */
 .admin-cards {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 25px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin: 25px 0;
 }
 
 .admin-card {
-    flex: 1;
-    background: white;
-    padding: 20px;
-    border-radius: 14px;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.12);
-    text-align: center;
-}
-
-.admin-card h3 {
-    font-size: 18px;
-    margin-bottom: 8px;
+  padding: 20px;
+  border-radius: 18px;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.12);
 }
 
 .admin-card p {
-    font-size: 26px;
-    font-weight: bold;
-    color: #003366;
+  font-size: 28px;
+  margin-top: 8px;
 }
 
-/* Admin Forms */
-.admin-form {
-    background: white;
-    padding: 25px;
-    margin-bottom: 25px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.12);
+/* Color Variants */
+.blue {
+  background: linear-gradient(to right, #2563eb, #06b6d4);
 }
 
-.admin-form input,
-.admin-form select {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: 1px solid #ccc;
+.green {
+  background: linear-gradient(to right, #16a34a, #4ade80);
 }
 
-.admin-form button {
-    padding: 12px 25px;
-    background: #0073e6;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
+.orange {
+  background: linear-gradient(to right, #f97316, #facc15);
 }
 
-.admin-form button:hover {
-    background: #0059b3;
+/* Boxes */
+.admin-box,
+.admin-section {
+  background: rgba(255,255,255,0.92);
+  padding: 25px;
+  margin-top: 25px;
+  border-radius: 18px;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.08);
 }
 
-/* Clear History Button */
-.clear-history-btn {
-    background: red !important;
-    padding: 12px 25px;
-    border-radius: 25px;
-    color: white;
-    border: none;
-    cursor: pointer;
+/* Danger Button */
+.danger-btn {
+  background: #dc2626 !important;
 }
 
-.clear-history-btn:hover {
-    background: darkred !important;
+.danger-btn:hover {
+  background: #b91c1c !important;
 }
 
-/* =========================================================
-=========================================================
-          ✅ EMPLOYEE PAGE ONLY (UNCHANGED STYLE)
-=========================================================
-========================================================= */
+/* ==========================================
+   EMPLOYEE PANEL PREMIUM UI
+========================================== */
 
-.employee-page .emp-header {
-    background: linear-gradient(to right, #003366, #0059b3);
-    height: 170px;
-    padding: 30px 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.employee-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 60px;
 }
 
-.employee-page .emp-title h1 {
-    color: white;
-    font-size: 28px;
+.employee-header h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ff4d1c;
 }
 
-.employee-page .emp-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 15px;
+.logout-btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: #111827;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
 }
 
-.employee-page .emp-profile-card {
-    background: white;
-    padding: 18px 25px;
-    border-radius: 15px;
-    width: 220px;
-    text-align: center;
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.25);
+.logout-btn:hover {
+  background: #ff4d1c;
 }
 
-.employee-page .logout-btn {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 20px;
-    background: #dc3545;
-    color: white;
-    border-radius: 20px;
-    font-weight: bold;
+/* Main Container */
+.employee-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px 0;
 }
 
-.employee-page .logout-btn:hover {
-    background: #b02a37;
+.page-title {
+  text-align: center;
+  font-size: 34px;
+  margin-bottom: 35px;
+  font-weight: 800;
+  color: #111827;
 }
 
-.employee-page .emp-search-box {
-    display: flex;
-    align-items: center;
-    background: white;
-    border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+/* Customer Grid */
+.customer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 25px;
 }
 
-.employee-page .search-icon {
-    background: #0073e6;
-    border: none;
-    padding: 10px 15px;
-    color: white;
+/* Customer Card */
+.customer-card {
+  background: rgba(255, 255, 255, 0.92);
+  padding: 22px;
+  border-radius: 20px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.10);
+  transition: 0.3s;
+  animation: fadeUp 0.6s ease;
 }
 
-.employee-page .emp-search-box input {
-    border: none;
-    outline: none;
-    padding: 10px 15px;
-    width: 200px;
+.customer-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0px 14px 35px rgba(0, 0, 0, 0.15);
 }
 
-/* =========================================================
-=========================================================
-          ✅ MANAGER PAGE ONLY (UNCHANGED STYLE)
-=========================================================
-========================================================= */
-
-.manager-page .box {
-    max-width: 1100px;
+/* Customer Header */
+.customer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
 }
 
-/* Chart Container */
-.manager-page .chart-box {
-    width: 500px;
-    margin: 30px auto;
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.15);
-    text-align: center;
+.customer-top h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
 }
 
-/* =========================================================
-   RESPONSIVE (ALL PAGES)
-========================================================= */
+.phone {
+  background: linear-gradient(to right, #2563eb, #06b6d4);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: white;
+  font-weight: 600;
+}
+
+/* Form inside Card */
+.customer-card select,
+.customer-card textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.customer-card textarea {
+  min-height: 80px;
+}
+
+/* Call Button */
+.call-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 700;
+  background: linear-gradient(to right, #ff4d1c, #ff7849);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.call-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}/* ==========================================
+   EMPLOYEE HERO BACKGROUND
+========================================== */
+
+.employee-hero {
+  text-align: center;
+  padding: 55px 20px;
+  margin-bottom: 40px;
+  border-radius: 22px;
+  background: url("https://www.transparenttextures.com/patterns/cubes.png"),
+    linear-gradient(to right,
+      rgba(255, 77, 28, 0.15),
+      rgba(37, 99, 235, 0.12)
+    );
+
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.employee-hero h1 {
+  font-size: 42px;
+  font-weight: 900;
+  color: #111827;
+}
+
+.employee-hero p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #475569;
+}
+
+/* ==========================================
+   EMPTY STATE DESIGN
+========================================== */
+
+.empty-state {
+  text-align: center;
+  padding: 70px 20px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 22px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.10);
+}
+
+.empty-state img {
+  width: 160px;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.empty-state h2 {
+  font-size: 26px;
+  font-weight: 900;
+  color: #ff4d1c;
+}
+
+.empty-state p {
+  margin-top: 10px;
+  font-size: 15px;
+  color: gray;
+}
+
+/* ==========================================
+   EMPLOYEE PROFILE CARD
+========================================== */
+
+.employee-profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+
+  background: rgba(255, 255, 255, 0.92);
+  padding: 18px 30px;
+  border-radius: 20px;
+
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.10);
+  margin-bottom: 35px;
+}
+
+/* LEFT ICON */
+.profile-left img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  padding: 10px;
+}
+
+/* CENTER INFO */
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h3 {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 6px;
+  color: #111827;
+}
+
+.profile-info p {
+  font-size: 14px;
+  margin: 2px 0;
+  color: #475569;
+}
+
+/* RIGHT BADGE */
+.profile-badge {
+  background: linear-gradient(to right, #16a34a, #4ade80);
+  padding: 10px 20px;
+  border-radius: 14px;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ==========================================
+   SEARCH BAR
+========================================== */
+
+.search-box {
+  width: 100%;
+  max-width: 520px;
+  margin: auto;
+  margin-bottom: 35px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 16px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.08);
+
+  transition: 0.3s;
+}
+
+.search-box input:focus {
+  border-color: #ff4d1c;
+  box-shadow: 0px 0px 12px rgba(255, 77, 28, 0.25);
+  transform: scale(1.01);
+}
+
+/* ==========================================
+   CUSTOMER CARD LIST
+========================================== */
+
+.customer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 25px;
+}
+
+.customer-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 22px;
+  border-radius: 20px;
+
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.10);
+  transition: 0.3s;
+}
+
+.customer-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0px 14px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* CUSTOMER HEADER */
+.customer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.customer-top h3 {
+  font-size: 18px;
+  font-weight: 900;
+  color: #111827;
+}
+
+/* STATUS BADGES */
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+}
+
+.status-badge.green {
+  background: linear-gradient(to right, #16a34a, #4ade80);
+}
+
+.status-badge.red {
+  background: linear-gradient(to right, #dc2626, #ff4d4d);
+}
+
+.status-badge.yellow {
+  background: linear-gradient(to right, #facc15, #f59e0b);
+  color: black;
+}
+
+/* CUSTOMER DETAILS */
+.customer-details {
+  margin: 12px 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.customer-details p {
+  margin: 4px 0;
+}
+
+.customer-details b {
+  color: #111827;
+}
+
+/* FORM INPUTS */
+.customer-card select,
+.customer-card textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.customer-card textarea {
+  min-height: 80px;
+  resize: none;
+}
+
+/* BUTTON */
+.call-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 700;
+
+  background: linear-gradient(to right, #ff4d1c, #ff7849);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.call-btn:hover {
+  transform: scale(1.03);
+  opacity: 0.95;
+}
+
+/* ==========================================
+   RESPONSIVE FIX
+========================================== */
 
 @media (max-width: 768px) {
 
-    .admin-cards {
-        flex-direction: column;
-    }
+  .employee-profile {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
 
-    .admin-sidebar {
-        display: none;
-    }
+  .profile-badge {
+    margin-top: 12px;
+  }
 
-    .employee-page .emp-header {
-        flex-direction: column;
-        height: auto;
-        text-align: center;
-    }
+  .customer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* STATUS BADGES */
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+}
+
+.status-badge.green {
+  background: linear-gradient(to right, #16a34a, #4ade80);
+}
+
+.status-badge.red {
+  background: linear-gradient(to right, #dc2626, #f87171);
+}
+
+.status-badge.yellow {
+  background: linear-gradient(to right, #f59e0b, #fbbf24);
+}
+
+
+
+.customer-checkbox-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  background: rgba(255,255,255,0.95);
+}
+
+.check-item {
+  display: block;
+  padding: 8px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.check-item:hover {
+  background: #f1f5f9;
+}
+
+.assign-btn {
+  margin-top: 15px;
+  background: linear-gradient(to right, #2563eb, #06b6d4);
+  color: white;
+  padding: 12px;
+  border: none;
+  width: 100%;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+/* ==========================================
+   CUSTOMER ACTION BUTTONS
+========================================== */
+
+.customer-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.call-now-btn {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  border-radius: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(to right, #16a34a, #4ade80);
+  color: white;
+  transition: 0.3s;
+}
+
+.call-now-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.whatsapp-btn {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  border-radius: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(to right, #25d366, #128c7e);
+  color: white;
+  transition: 0.3s;
+}
+
+.whatsapp-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
 }

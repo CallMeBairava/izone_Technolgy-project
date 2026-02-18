@@ -6,6 +6,7 @@
 </head>
 
 <body>
+<div class="background-shape"></div>
 
 <div class="admin-portal">
 
@@ -18,37 +19,34 @@
         <a href="/logout">🚪 Logout</a>
     </div>
 
-
     <!-- ================= MAIN CONTENT ================= -->
     <div class="admin-main">
 
         <!-- ================= TOP NAVBAR ================= -->
         <div class="admin-navbar">
-            <h1>CARE College CRM Portal</h1>
+            <h1>Admin CRM Portal</h1>
             <div class="admin-user">
                 Admin: {{ session["username"] }}
             </div>
         </div>
 
-
         <!-- ================= DASHBOARD CARDS ================= -->
         <div class="admin-cards">
-            <div class="admin-card">
+            <div class="admin-card blue">
                 <h3>Total Customers</h3>
                 <p>{{ customers|length }}</p>
             </div>
 
-            <div class="admin-card">
+            <div class="admin-card green">
                 <h3>Total Employees</h3>
                 <p>{{ employees|length }}</p>
             </div>
 
-            <div class="admin-card">
+            <div class="admin-card orange">
                 <h3>Total Teams</h3>
                 <p>{{ teams|length }}</p>
             </div>
         </div>
-
 
         <!-- ================= ADD EMPLOYEE ================= -->
         <div class="admin-box">
@@ -63,7 +61,6 @@
                 <button type="submit">Add Employee</button>
             </form>
         </div>
-
 
         <!-- ================= ADD CUSTOMER ================= -->
         <div class="admin-box">
@@ -87,7 +84,6 @@
             </form>
         </div>
 
-
         <!-- ================= EXCEL UPLOAD ================= -->
         <div class="admin-box">
             <h3>📂 Upload Customers via Excel</h3>
@@ -98,12 +94,10 @@
             </form>
         </div>
 
-
         <!-- ================= TEAM MANAGEMENT ================= -->
         <div class="admin-box">
             <h3>👥 Team Management</h3>
 
-            <!-- Create Team -->
             <form method="POST" action="/create_team">
                 <input type="text" name="team_name" placeholder="Enter Team Name" required>
                 <button type="submit">+ Create Team</button>
@@ -111,7 +105,6 @@
 
             <hr style="margin:20px 0;">
 
-            <!-- Assign Employee -->
             <form method="POST" action="/add_team_member">
 
                 <select name="team_id" required>
@@ -131,6 +124,45 @@
                 <button type="submit">Assign Employee</button>
             </form>
         </div>
+
+
+
+        <!-- ================= ASSIGN CUSTOMERS TO TEAM ================= -->
+<div class="admin-box">
+    <h3>📌 Assign Customers to Team</h3>
+
+    <form method="POST" action="/assign_team_customers">
+
+        <!-- Select Team -->
+        <select name="team_id" required>
+            <option value="">-- Select Team --</option>
+            {% for t in teams %}
+            <option value="{{ t[0] }}">{{ t[1] }}</option>
+            {% endfor %}
+        </select>
+
+        <p style="margin-top:15px; font-weight:600;">
+            Select Customers:
+        </p>
+
+        <!-- Customer Checkbox List -->
+        <div class="customer-checkbox-list">
+
+            {% for c in customers %}
+            <label class="check-item">
+                <input type="checkbox" name="customer_ids" value="{{ c[0] }}">
+                {{ c[1] }} ({{ c[2] }})
+            </label>
+            {% endfor %}
+
+        </div>
+
+        <button type="submit" class="btn assign-btn">
+            ✅ Assign Selected Customers
+        </button>
+
+    </form>
+</div>
 
 
         <!-- ================= CUSTOMER LIST ================= -->
@@ -163,15 +195,15 @@
         </div>
 
         <!-- ================= CLEAR CALL HISTORY ================= -->
-    <div class="admin-section">
-        <h3>🧹 Call History Management</h3>
+        <div class="admin-section">
+            <h3>🧹 Call History Management</h3>
 
-        <form method="POST" action="/clear_history">
-            <button type="submit" style="background:#dc3545;">
-                ❌ Clear All Call History
-            </button>
-        </form>
-    </div>
+            <form method="POST" action="/clear_history">
+                <button type="submit" class="danger-btn">
+                    ❌ Clear All Call History
+                </button>
+            </form>
+        </div>
 
     </div>
 </div>
