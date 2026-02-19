@@ -1,156 +1,286 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Manager Dashboard</title>
-
+    <title>Admin CRM Dashboard</title>
     <link rel="stylesheet" href="/static/style.css">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 <div class="background-shape"></div>
 
-<div class="crm-container">
+<div class="admin-portal">
 
     <!-- ================= SIDEBAR ================= -->
-    <div class="sidebar">
-        <h2>Manager CRM</h2>
+    <div class="admin-sidebar">
+        <h2>Manager Dashboard</h2>
 
-        <a href="/manager_dashboard" class="active">📊 Dashboard</a>
-        <a href="/export_excel">⬇ Export Excel</a>
-        <a href="/export_pdf">⬇ Export PDF</a>
-        <a href="/logout">🚪 Logout</a>
+        <a href="/admin_dashboard" class="active">📊 Dashboard</a>
+        <a href="/employees">Employees</a>
+
+        <!-- ✅ Scroll Sections -->
+        <a href="#completed">✅ Completed Works</a>
+        <a href="#pending">⏳ Pending Works</a>
+        <a href="#reassign">🔄 Reassign Works</a>
+
+        <a href="/logout">Logout</a>
     </div>
 
     <!-- ================= MAIN CONTENT ================= -->
-    <div class="main-content">
+    <div class="admin-main">
 
-        <!-- HEADER -->
-        <div class="top-header">
-            <h1>📊 Manager Dashboard</h1>
-            <p>Customer Reports, Charts, Teams & Call History</p>
+        <!-- ================= TOP NAVBAR ================= -->
+        <div class="admin-navbar">
+            <h1>Manager CRM Portal</h1>
+            
         </div>
 
-        <!-- ================= SUMMARY CARDS ================= -->
-        <div class="summary-grid">
-
-            <div class="summary-card blue">
+        <!-- ================= DASHBOARD CARDS ================= -->
+        <div class="admin-cards">
+            <div class="admin-card blue">
                 <h3>Total Customers</h3>
-                <p>{{ total }}</p>
+                <p>{{ customers|length }}</p>
             </div>
 
-            <div class="summary-card green">
-                <h3>Willing</h3>
-                <p>{{ willing }}</p>
+            <div class="admin-card green">
+                <h3>Total Employees</h3>
+                <p>{{ employees|length }}</p>
             </div>
 
-            <div class="summary-card red">
-                <h3>Not Willing</h3>
-                <p>{{ not_willing }}</p>
-            </div>
-
-            <div class="summary-card yellow">
-                <h3>Pending</h3>
-                <p>{{ pending }}</p>
-            </div>
-
-        </div>
-
-        <!-- ================= STATUS PIE CHART ================= -->
-        <div class="box">
-            <h2>📌 Customer Status Chart</h2>
-
-            <div class="chart-box">
-                <canvas id="statusChart"></canvas>
+            <div class="admin-card orange">
+                <h3>Total Teams</h3>
+                <p>{{ teams|length }}</p>
             </div>
         </div>
 
-        <!-- ================= TEAM LIST + MEMBERS ================= -->
-        <div class="box">
-            <h2>👥 Teams & Members List</h2>
+        <!-- ================= ADD EMPLOYEE ================= -->
+        <div class="admin-box">
+            <h3>➕ Add Employee</h3>
 
-            <table>
-                <tr>
-                    <th>Team Name</th>
-                    <th>Team Members</th>
-                </tr>
+            <form method="POST" action="/add_employee">
+                <input type="text" name="name" placeholder="Employee Name" required>
+                <input type="text" name="phone" placeholder="Phone Number" required>
+                <input type="text" name="username" placeholder="Login Username" required>
+                <input type="password" name="password" placeholder="Login Password" required>
 
-                {% for team in teams %}
-                <tr>
-                    <td><b>{{ team[1] }}</b></td>
-
-                    <td>
-                        {% for emp in employees %}
-                            {% if emp[5] == team[0] %}
-                                👤 {{ emp[1] }} <br>
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-
-            {% if teams|length == 0 %}
-            <p class="error-text">❌ No Teams Created Yet.</p>
-            {% endif %}
+                <button type="submit">Add Employee</button>
+            </form>
         </div>
 
-        <!-- ================= CALL HISTORY TABLE ================= -->
-        <div class="box">
-            <h2>📞 Call History Report (With Notes)</h2>
+        <!-- ================= ADD CUSTOMER ================= -->
+        <div class="admin-box">
+            <h3>➕ Add Customer Manually</h3>
+
+            <form method="POST" action="/add_customer">
+                <input type="text" name="cust_name" placeholder="Customer Name" required>
+                <input type="text" name="cust_phone" placeholder="Customer Phone" required>
+                <input type="email" name="cust_email" placeholder="Customer Email" required>
+
+                <select name="cust_gender" required>
+                    <option value="">-- Select Gender --</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+
+                <input type="text" name="cust_address" placeholder="Customer Address" required>
+
+                <button type="submit">Add Customer</button>
+            </form>
+        </div>
+
+        <!-- ================= EXCEL UPLOAD ================= -->
+<!-- ================= EXCEL UPLOAD + AUTO DISTRIBUTION ================= -->
+<div class="admin-box">
+    <h3>📂 Upload Customers via Excel (Auto Assign)</h3>
+
+    <form method="POST" action="/upload_customers" enctype="multipart/form-data">
+
+        <!-- Select Team -->
+        <select name="team_id" required>
+            <option value="">-- Select Team for Auto Distribution --</option>
+            {% for t in teams %}
+            <option value="{{ t[0] }}">{{ t[1] }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Upload File -->
+        <input type="file" name="file" required>
+
+        <button type="submit">Upload & Auto Assign</button>
+    </form>
+</div>
+
+
+        <!-- ================= TEAM MANAGEMENT ================= -->
+        <div class="admin-box">
+            <h3>👥 Team Management</h3>
+
+            <form method="POST" action="/create_team">
+                <input type="text" name="team_name" placeholder="Enter Team Name" required>
+                <button type="submit">+ Create Team</button>
+            </form>
+
+            <hr style="margin:20px 0;">
+
+            <form method="POST" action="/add_team_member">
+
+                <select name="team_id" required>
+                    <option value="">-- Select Team --</option>
+                    {% for t in teams %}
+                    <option value="{{ t[0] }}">{{ t[1] }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="employee_id" required>
+                    <option value="">-- Select Employee --</option>
+                    {% for e in employees %}
+                    <option value="{{ e[0] }}">{{ e[1] }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Assign Employee</button>
+            </form>
+        </div>
+
+        <!-- ================= ASSIGN CUSTOMERS TO TEAM ================= -->
+        <div class="admin-box">
+            <h3>📌 Assign Customers to Team</h3>
+
+            <form method="POST" action="/assign_team_customers">
+
+                <select name="team_id" required>
+                    <option value="">-- Select Team --</option>
+                    {% for t in teams %}
+                    <option value="{{ t[0] }}">{{ t[1] }}</option>
+                    {% endfor %}
+                </select>
+
+                <p style="margin-top:15px; font-weight:600;">
+                    Select Customers:
+                </p>
+
+                <div class="customer-checkbox-list">
+                    {% for c in customers %}
+                    <label class="check-item">
+                        <input type="checkbox" name="customer_ids" value="{{ c[0] }}">
+                        {{ c[1] }} ({{ c[2] }})
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn assign-btn">
+                    ✅ Assign Selected Customers
+                </button>
+
+            </form>
+        </div>
+
+        <!-- ================= CUSTOMER LIST ================= -->
+        <div class="admin-box">
+            <h3>📋 Customer List</h3>
 
             <table>
                 <tr>
                     <th>ID</th>
-                    <th>Employee</th>
-                    <th>Customer</th>
+                    <th>Name</th>
+                    <th>Phone</th>
                     <th>Status</th>
-                    <th>Notes</th>
-                    <th>Call Time</th>
                 </tr>
 
-  {% for h in history %}
-<tr>
-    <td>{{ h[0] }}</td>
-    <td>{{ h[1] }}</td>
-    <td>{{ h[2] }}</td>
-    <td><b>{{ h[3] }}</b></td>
+                {% for c in customers %}
+                <tr>
+                    <td>{{ c[0] }}</td>
+                    <td>{{ c[1] }}</td>
+                    <td>{{ c[2] }}</td>
+                    <td><b>{{ c[6] }}</b></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
 
-    <!-- ✅ Notes Correct -->
-    <td style="max-width:250px;">
-        {{ h[5] }}
-    </td>
+        <!-- ================= COMPLETED WORKS ================= -->
+        <div class="admin-box" id="completed">
+            <h3>✅ Completed Works</h3>
 
-    <!-- ✅ Call Time Correct -->
-    <td>{{ h[4] }}</td>
-</tr>
-{% endfor %}
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                </tr>
 
+                {% for c in customers %}
+                {% if c[6] == "Willing" %}
+                <tr>
+                    <td>{{ c[1] }}</td>
+                    <td>{{ c[2] }}</td>
+                    <td><b style="color:green;">{{ c[6] }}</b></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- ================= PENDING WORKS ================= -->
+        <div class="admin-box" id="pending">
+            <h3>⏳ Pending Works</h3>
+
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                </tr>
+
+                {% for c in customers %}
+                {% if c[6] == "Pending" %}
+                <tr>
+                    <td>{{ c[1] }}</td>
+                    <td>{{ c[2] }}</td>
+                    <td><b style="color:orange;">{{ c[6] }}</b></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- ================= REASSIGN WORKS ================= -->
+        <div class="admin-box" id="reassign">
+            <h3>🔄 Reassign Customer</h3>
+
+            <form method="POST" action="/reassign_customer">
+
+                <select name="customer_id" required>
+                    <option value="">-- Select Customer --</option>
+                    {% for c in customers %}
+                    <option value="{{ c[0] }}">{{ c[1] }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="team_id" required>
+                    <option value="">-- Select New Team --</option>
+                    {% for t in teams %}
+                    <option value="{{ t[0] }}">{{ t[1] }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">🔁 Reassign</button>
+            </form>
+        </div>
+
+        <!-- ================= CLEAR CALL HISTORY ================= -->
+        <div class="admin-box">
+            <h3>🧹 Call History Management</h3>
+
+            <form method="POST" action="/clear_history">
+                <button type="submit" class="danger-btn">
+                    ❌ Clear All Call History
+                </button>
+            </form>
         </div>
 
     </div>
 </div>
-
-
-<!-- ================= CHART SCRIPT ================= -->
-<script>
-    const willing = {{ willing | tojson }};
-    const notWilling = {{ not_willing | tojson }};
-    const pending = {{ pending | tojson }};
-
-    new Chart(document.getElementById("statusChart"), {
-        type: "pie",
-        data: {
-            labels: ["Willing", "Not Willing", "Pending"],
-            datasets: [{
-                data: [willing, notWilling, pending],
-                backgroundColor: ["#16a34a", "#dc2626", "#2563eb"]
-            }]
-        }
-    });
-</script>
 
 </body>
 </html>

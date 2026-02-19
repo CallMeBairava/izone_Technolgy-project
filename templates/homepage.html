@@ -1,62 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Customer Calling CRM</title>
+    <title>CallCRM Home</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
 
-<!-- ================= TOP NAVBAR ================= -->
-<div class="topbar">
-    <h2 class="logo">Customer Calling CRM System</h2>
-    <a href="/login" class="top-login">Login</a>
+<!-- ================= TOP BAR ================= -->
+<div class="top-bar">
+    <p>📍 Trichy | 📞 +91 98765 43210 | ✉ callcrm@gmail.com</p>
+</div>
+
+
+<!-- ================= NAVBAR ================= -->
+<div class="navbar">
+    <h2 class="logo">Call<span>CRM</span></h2>
+
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="#">Support</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+
+    <a href="/login" class="nav-btn">Get Started</a>
 </div>
 
 
 <!-- ================= HERO SECTION ================= -->
 <section class="hero">
 
-    <div class="hero-content">
-        <h1>📞 Customer Calling CRM System</h1>
+    <!-- Background Shapes -->
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+
+    <!-- LEFT CONTENT -->
+    <div class="hero-text">
+        <h1>
+            Customer Calling <br>
+            <span>CRM System</span>
+        </h1>
 
         <p>
-            Manage Customers, Assign Employees, Track Calling Status, Generate Reports  
-            with Admin, Manager, Employee Roles.
+            Manage Customers, Assign Employees, Track Calling Status,
+            and Generate Reports with Admin, Manager, Employee Roles.
         </p>
 
-        <a href="/login" class="hero-btn">🚀 Login Now</a>
+        <div class="hero-actions">
+            <a href="/login" class="hero-btn">🚀 Login Now</a>
+            <a href="#features" class="hero-btn-outline">Learn More</a>
+        </div>
     </div>
 
+
+    <!-- RIGHT IMAGE -->
     <div class="hero-image">
-        <img src="https://cdn-icons-png.flaticon.com/512/1995/1995470.png">
+        <img src="https://cdn-icons-png.flaticon.com/512/942/942748.png">
     </div>
 
 </section>
 
 
-<!-- ================= FEATURES CARDS ================= -->
-<section class="features">
+<!-- ================= FEATURE CARDS ================= -->
+<section class="features" id="features">
 
-    <h2>✨ Key Features</h2>
+    <div class="feature-card">
+        <h3>📞 Smart Calling</h3>
+        <p>Employees update customer status with notes after every call.</p>
+    </div>
 
-    <div class="card-grid">
+    <div class="feature-card">
+        <h3>👥 Team Management</h3>
+        <p>Admin assigns employees into teams and distributes customers.</p>
+    </div>
 
-        <div class="feature-card">
-            <h3>👑 Admin Control</h3>
-            <p>Create employees, upload customers, manage teams easily.</p>
-        </div>
-
-        <div class="feature-card">
-            <h3>📊 Manager Reports</h3>
-            <p>Track call performance, view charts, export reports.</p>
-        </div>
-
-        <div class="feature-card">
-            <h3>📞 Employee Calling</h3>
-            <p>Employees call assigned customers and update status instantly.</p>
-        </div>
-
+    <div class="feature-card">
+        <h3>📊 Reports & Charts</h3>
+        <p>Manager dashboard shows analytics and export options.</p>
     </div>
 
 </section>

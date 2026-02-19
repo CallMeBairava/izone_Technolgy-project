@@ -10,10 +10,8 @@
 <!-- ================= HEADER ================= -->
 <div class="employee-header">
     <h2>📞 Employee Calling Panel</h2>
-
     <a href="/logout" class="logout-btn">Logout</a>
 </div>
-
 
 <div class="employee-container">
 
@@ -25,9 +23,9 @@
         </div>
 
         <div class="profile-info">
-            <h3>Welcome, Employee</h3>
-            <p>Role: Employee Caller</p>
-            <p>Team: Assigned Customers</p>
+            <h3>Welcome, {{ employee.name }}</h3>
+            <p>📞 Phone: {{ employee.phone }}</p>
+            <p>👥 Team: {{ employee.team }}</p>
         </div>
 
         <div class="profile-badge">
@@ -36,13 +34,11 @@
 
     </div>
 
-
     <!-- ================= HERO TITLE ================= -->
     <div class="employee-hero">
         <h1>Calling Customers</h1>
         <p>Update customer status after each call with notes.</p>
     </div>
-
 
     <!-- ================= SEARCH BAR ================= -->
     <div class="search-box">
@@ -50,7 +46,6 @@
                placeholder="Search customer by name..."
                onkeyup="searchCustomers()">
     </div>
-
 
     <!-- ================= CUSTOMER LIST ================= -->
     {% if customers|length > 0 %}
@@ -60,39 +55,71 @@
         {% for c in customers %}
         <div class="customer-card">
 
-            <!-- CUSTOMER NAME + STATUS -->
+            <!-- ================= CUSTOMER NAME + STATUS ================= -->
             <div class="customer-top">
                 <h3>👤 {{ c[1] }}</h3>
 
-                <!-- ✅ Correct Status -->
                 <span class="phone">
                     {{ c[6] }}
                 </span>
             </div>
 
-           <p>📞 Phone: {{ c[2] }}</p>
+            <!-- ================= PHONE ================= -->
+            <p>📞 <b>Phone:</b> {{ c[2] }}</p>
 
-<div class="customer-actions">
-    <a href="tel:{{ c[2] }}" class="call-now-btn">📞 Call</a>
-    <a href="https://wa.me/91{{ c[2] }}" target="_blank" class="whatsapp-btn">💬 WhatsApp</a>
-</div>
+            <!-- ================= ACTION BUTTONS ================= -->
+            <div class="customer-actions">
+                <a href="tel:{{ c[2] }}" class="call-now-btn">📞 Call</a>
 
-            <!-- ✅ Correct Email -->
+                <a href="https://wa.me/91{{ c[2] }}" target="_blank"
+                   class="whatsapp-btn">
+                    💬 WhatsApp
+                </a>
+            </div>
+
+            <!-- ================= EMAIL ================= -->
             <p>📧 <b>Email:</b> {{ c[3] }}</p>
 
-            <!-- ✅ Correct Gender -->
+            <!-- ================= GENDER ================= -->
             <p>⚧ <b>Gender:</b> {{ c[4] }}</p>
 
-            <!-- ✅ Correct Address -->
+            <!-- ================= ADDRESS ================= -->
             <p>🏠 <b>Address:</b> {{ c[5] }}</p>
 
+            <!-- ================= PRIORITY ================= -->
+            <p>
+                ⭐ <b>Priority:</b>
+                <span class="priority {{ c[7]|lower }}">
+                    {{ c[7] }}
+                </span>
+            </p>
+
+            <!-- ================= DATE & TIME ================= -->
+
+            <!-- ✅ Assigned Time -->
+            <p>📅 <b>Assigned On:</b>
+                {% if c[8] %}
+                    {{ c[8] }}
+                {% else %}
+                    Not Available
+                {% endif %}
+            </p>
+
+            <!-- ✅ Completed Time -->
+            <p>✅ <b>Completed On:</b>
+                {% if c[9] %}
+                    {{ c[9] }}
+                {% else %}
+                    ⏳ Not Completed Yet
+                {% endif %}
+            </p>
 
             <!-- ================= FORM ================= -->
             <form method="POST" action="/save_call_note">
 
                 <input type="hidden" name="customer_id" value="{{ c[0] }}">
 
-                <!-- STATUS DROPDOWN -->
+                <!-- ================= STATUS DROPDOWN ================= -->
                 <select name="status">
 
                     <option value="Pending"
@@ -112,10 +139,11 @@
 
                 </select>
 
-                <!-- NOTES -->
-                <textarea name="notes" placeholder="Enter call notes..."></textarea>
+                <!-- ================= NOTES ================= -->
+                <textarea name="notes"
+                          placeholder="Enter call notes..."></textarea>
 
-                <!-- SUBMIT -->
+                <!-- ================= SUBMIT ================= -->
                 <button type="submit" class="call-btn">
                     📌 Save Call Update
                 </button>
@@ -139,7 +167,6 @@
     {% endif %}
 
 </div>
-
 
 <!-- ================= SEARCH SCRIPT ================= -->
 <script>

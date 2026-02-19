@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CEO Dashboard</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<div class="background-shape"></div>
+
+<div class="crm-container">
+
+    <!-- ================= SIDEBAR ================= -->
+    <div class="sidebar">
+        <h2>CEO CRM</h2>
+
+        <a href="/ceo_dashboard" class="active">📊 Dashboard</a>
+        <a href="/export_excel">⬇ Export Excel</a>
+        <a href="/export_pdf">⬇ Export PDF</a>
+        <a href="/logout">🚪 Logout</a>
+    </div>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <div class="main-content">
+
+        <!-- HEADER -->
+        <div class="top-header">
+            <h1>📊 CEO Dashboard</h1>
+            <p>Company Reports, Charts, Teams & Call History</p>
+        </div>
+
+        <!-- ================= SUMMARY CARDS ================= -->
+        <div class="summary-grid">
+
+            <div class="summary-card blue">
+                <h3>Total Customers</h3>
+                <p>{{ total }}</p>
+            </div>
+
+            <div class="summary-card green">
+                <h3>Willing</h3>
+                <p>{{ willing }}</p>
+            </div>
+
+            <div class="summary-card red">
+                <h3>Not Willing</h3>
+                <p>{{ not_willing }}</p>
+            </div>
+
+            <div class="summary-card yellow">
+                <h3>Pending</h3>
+                <p>{{ pending }}</p>
+            </div>
+
+        </div>
+
+        <!-- ================= STATUS PIE CHART ================= -->
+        <div class="box">
+            <h2>📌 Customer Status Chart</h2>
+
+            <div class="chart-box">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+
+        <!-- ================= TEAM LIST + MEMBERS ================= -->
+        <div class="box">
+            <h2>👥 Teams & Members List</h2>
+
+            <table>
+                <tr>
+                    <th>Team Name</th>
+                    <th>Team Members</th>
+                </tr>
+
+                {% for team in teams %}
+                <tr>
+                    <td><b>{{ team[1] }}</b></td>
+
+                    <td>
+                        {% for emp in employees %}
+                            {% if emp[5] == team[0] %}
+                                👤 {{ emp[1] }} <br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            {% if teams|length == 0 %}
+            <p class="error-text">❌ No Teams Created Yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- ================= CALL HISTORY TABLE ================= -->
+        <div class="box">
+            <h2>📞 Call History Report (With Notes)</h2>
+
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Employee</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Call Time</th>
+                </tr>
+
+                {% for h in history %}
+                <tr>
+                    <td>{{ h[0] }}</td>
+                    <td>{{ h[1] }}</td>
+                    <td>{{ h[2] }}</td>
+                    <td><b>{{ h[3] }}</b></td>
+
+                    <td style="max-width:250px;">
+                        {{ h[5] }}
+                    </td>
+
+                    <td>{{ h[4] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ================= CHART SCRIPT ================= -->
+<script>
+    const willing = {{ willing | tojson }};
+    const notWilling = {{ not_willing | tojson }};
+    const pending = {{ pending | tojson }};
+
+    new Chart(document.getElementById("statusChart"), {
+        type: "pie",
+        data: {
+            labels: ["Willing", "Not Willing", "Pending"],
+            datasets: [{
+                data: [willing, notWilling, pending],
+                backgroundColor: ["#16a34a", "#dc2626", "#2563eb"]
+            }]
+        }
+    });
+</script>
+
+</body>
+</html>

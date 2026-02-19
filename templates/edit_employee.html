@@ -1,26 +1,150 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Employee</title>
+    <title>Employee Panel</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
-<div class="background-shape"></div>
 
-<div class="box">
-    <h2>✏ Edit Employee</h2>
-
-    <form method="POST">
-        <input type="text" name="name" value="{{ emp[1] }}" required>
-        <input type="text" name="phone" value="{{ emp[2] }}" required>
-        <input type="text" name="username" value="{{ emp[3] }}" required>
-        <input type="password" name="password" value="{{ emp[4] }}" required>
-
-        <button type="submit">Update Employee</button>
-    </form>
-
-    <a href="/employees" class="btn call">⬅ Back</a>
+<!-- ================= HEADER BAR ================= -->
+<div class="employee-header-bar">
+    <h2>📞 Employee Calling Panel</h2>
+    <a href="/logout" class="logout-btn">Logout</a>
 </div>
+
+
+<div class="employee-wrapper">
+
+    <!-- ================= PROFILE CARD ================= -->
+    <div class="employee-profile-card">
+
+        <!-- LEFT ICON -->
+        <div class="profile-avatar">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+        </div>
+
+        <!-- CENTER INFO -->
+        <div class="profile-details">
+            <h3>Welcome, {{ emp_name }}</h3>
+            <p>Role: <b>Employee Caller</b></p>
+            <p>Team: <b>{{ team_name }}</b></p>
+        </div>
+
+        <!-- RIGHT BADGE -->
+        <div class="profile-status">
+            Active Caller
+        </div>
+
+    </div>
+
+
+    <!-- ================= HERO BANNER ================= -->
+    <div class="employee-hero-banner">
+        <h1>Calling Customers</h1>
+        <p>Update customer status after each call with notes.</p>
+    </div>
+
+
+    {% if customers|length > 0 %}
+
+    <!-- ================= SEARCH ================= -->
+    <div class="employee-search">
+        <input type="text" id="searchInput"
+               placeholder="Search customer by name...">
+    </div>
+
+
+    <!-- ================= CUSTOMER GRID ================= -->
+    <div class="customer-grid" id="customerGrid">
+
+        {% for c in customers %}
+        <div class="customer-card">
+
+            <!-- TOP ROW -->
+            <div class="customer-head">
+                <h3 class="cust-name">👤 {{ c[1] }}</h3>
+
+                <!-- STATUS BADGE -->
+                <span class="status-badge">
+                    {{ c[6] }}
+                </span>
+            </div>
+
+            <!-- CUSTOMER INFO -->
+            <div class="customer-info">
+                <p>📞 Phone: {{ c[2] }}</p>
+                <p>📧 Email: {{ c[3] }}</p>
+                <p>⚥ Gender: {{ c[4] }}</p>
+                <p>🏠 Address: {{ c[5] }}</p>
+            </div>
+
+            <!-- FORM -->
+            <form method="POST" action="/save_call_note">
+                <input type="hidden" name="customer_id" value="{{ c[0] }}">
+
+                <!-- STATUS SELECT -->
+                <select name="status" required>
+                    <option value="Pending" {% if c[6]=="Pending" %}selected{% endif %}>
+                        Pending
+                    </option>
+
+                    <option value="Willing" {% if c[6]=="Willing" %}selected{% endif %}>
+                        Willing
+                    </option>
+
+                    <option value="Not Willing" {% if c[6]=="Not Willing" %}selected{% endif %}>
+                        Not Willing
+                    </option>
+                </select>
+
+                <!-- NOTES -->
+                <textarea name="notes" placeholder="Enter call notes..." required></textarea>
+
+                <!-- BUTTON -->
+                <button type="submit" class="save-btn">
+                    📌 Save Call Update
+                </button>
+            </form>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <!-- ================= EMPTY STATE ================= -->
+    <div class="empty-state">
+        <img src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png">
+        <h2>No Customers Assigned</h2>
+        <p>Please wait until Admin assigns customers to your team.</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- ================= SEARCH SCRIPT ================= -->
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const cards = document.querySelectorAll(".customer-card");
+
+    searchInput.addEventListener("keyup", function () {
+        let value = searchInput.value.toLowerCase();
+
+        cards.forEach(card => {
+            let name = card.querySelector(".cust-name").innerText.toLowerCase();
+
+            if (name.includes(value)) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
